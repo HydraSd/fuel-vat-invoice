@@ -19,3 +19,11 @@ export function formatLKRInWords(amount: number): string {
 
   return `${rupeesText} ONLY`
 }
+
+export function currency(amount: number) {
+  const value = amount.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+  return value
+}

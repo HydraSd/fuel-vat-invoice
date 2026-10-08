@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { SubmitButton } from './submit-button'
+import { formatYearMonth } from '../utils/date-format'
 
 type ProductType = 'petrol' | 'diesel' | 'both'
 
@@ -32,9 +33,13 @@ type SavedFormState = {
   dieselQty: number
 }
 
+function getDefaultInvoicePrefix(): string {
+  return `${formatYearMonth(new Date())}_LAKE_00`
+}
+
 function getDefaultState(): SavedFormState {
   return {
-    invoiceNumber: '',
+    invoiceNumber: getDefaultInvoicePrefix(),
     invoiceDate: new Date().toISOString().split('T')[0],
     buyerName: '',
     buyerTinNo: '',
@@ -51,60 +56,61 @@ function getDefaultState(): SavedFormState {
 function getInitialState(searchParams: URLSearchParams | null): SavedFormState {
   const defaultState = getDefaultState()
   const params = searchParams ?? new URLSearchParams()
-  const productTypeFromUrl = params.get('product_type')
-  const selectedProduct =
-    productTypeFromUrl === 'petrol' || productTypeFromUrl === 'diesel' || productTypeFromUrl === 'both'
-      ? productTypeFromUrl
-      : defaultState.selectedProduct
+  
+  // 1. Prioritize URL Search Params
+  if (params.toString()) {
+    const productTypeFromUrl = params.get('product_type')
+    const selectedProduct =
+      productTypeFromUrl === 'petrol' || productTypeFromUrl === 'diesel' || productTypeFromUrl === 'both'
+        ? productTypeFromUrl
+        : defaultState.selectedProduct
 
-  return {
-    invoiceNumber: params.get('invoice_number') ?? defaultState.invoiceNumber,
-    invoiceDate: params.get('invoice_date') ?? defaultState.invoiceDate,
-    buyerName: params.get('buyer_name') ?? defaultState.buyerName,
-    buyerTinNo: params.get('buyer_tin_no') ?? defaultState.buyerTinNo,
-    buyerVatNumber: params.get('buyer_vat_number') ?? defaultState.buyerVatNumber,
-    buyerAddress: params.get('buyer_address') ?? defaultState.buyerAddress,
-    selectedProduct,
-    petrolPrice: Number(params.get('petrol_unit_price') ?? '0'),
-    petrolQty: Number(params.get('petrol_quantity') ?? '0'),
-    dieselPrice: Number(params.get('diesel_unit_price') ?? '0'),
-    dieselQty: Number(params.get('diesel_quantity') ?? '0'),
+    return {
+      invoiceNumber: params.get('invoice_number') ?? defaultState.invoiceNumber,
+      invoiceDate: params.get('invoice_date') ?? defaultState.invoiceDate,
+      buyerName: params.get('buyer_name') ?? defaultState.buyerName,
+      buyerTinNo: params.get('buyer_tin_no') ?? defaultState.buyerTinNo,
+      buyerVatNumber: params.get('buyer_vat_number') ?? defaultState.buyerVatNumber,
+      buyerAddress: params.get('buyer_address') ?? defaultState.buyerAddress,
+      selectedProduct,
+      petrolPrice: Number(params.get('petrol_unit_price') ?? '0'),
+      petrolQty: Number(params.get('petrol_quantity') ?? '0'),
+      dieselPrice: Number(params.get('diesel_unit_price') ?? '0'),
+      dieselQty: Number(params.get('diesel_quantity') ?? '0'),
+    }
   }
+
+  // 2. Read from sessionStorage on the client side during lazy initialization
+  if (typeof window !== 'undefined') {
+    const saved = sessionStorage.getItem(STORAGE_KEY)
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved) as Partial<SavedFormState>
+        return {
+          ...defaultState,
+          ...parsed,
+        }
+      } catch {
+        // Fallback to default state on parse error
+      }
+    }
+  }
+
+  return defaultState
 }
 
 export default function VatInvoiceForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const [formState, setFormState] = useState<SavedFormState>(() => {
-    const params = new URLSearchParams(searchParams?.toString() ?? '')
-    if (params.toString()) {
-      return getInitialState(params)
-    }
+  // Lazy state initialization runs synchronously before first render
+  const [formState, setFormState] = useState<SavedFormState>(() =>
+    getInitialState(searchParams)
+  )
 
-    if (typeof window === 'undefined') {
-      return getInitialState(null)
-    }
-
-    const saved = sessionStorage.getItem(STORAGE_KEY)
-    if (!saved) {
-      return getInitialState(null)
-    }
-
-    try {
-      const parsed = JSON.parse(saved) as Partial<SavedFormState>
-      return {
-        ...getDefaultState(),
-        ...parsed,
-      }
-    } catch {
-      return getInitialState(null)
-    }
-  })
-
+  // Persist state changes to sessionStorage (external system sync)
   useEffect(() => {
     if (typeof window === 'undefined') return
-
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(formState))
   }, [formState])
 
@@ -141,7 +147,7 @@ export default function VatInvoiceForm() {
   const { subtotal, vatAmount, total } = useMemo(() => {
     const petrolTotal = showPetrol ? formState.petrolPrice * formState.petrolQty : 0
     const dieselTotal = showDiesel ? formState.dieselPrice * formState.dieselQty : 0
-    const subtotal = (petrolTotal + dieselTotal)/118 * 100
+    const subtotal = ((petrolTotal + dieselTotal) / 118) * 100
     const vatAmount = subtotal * 0.18
 
     return {
@@ -492,7 +498,7 @@ export default function VatInvoiceForm() {
           </div>
 
           <div className="w-1/2">
-            <SubmitButton form='invoice-form'/>
+            <SubmitButton form="invoice-form" />
           </div>
         </div>
       </div>

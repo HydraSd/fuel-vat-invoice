@@ -4,6 +4,7 @@ import { formatLKRInWords } from './utils/currency-convertor'
 import Image from 'next/image'
 import PrintButton from './components/print-btn'
 import { extendedAmount } from './utils/extended'
+import { formatDate } from '../form/utils/date-format'
 
 type SearchParamsValue = string | string[] | undefined
 
@@ -36,6 +37,7 @@ export default async function InvoicePreviewPage({ searchParams }: Props) {
   // Parameter extractions with defaults based on document
   
   const invoiceDate = getValue(params.invoice_date) || '-'
+  const formatedDate = invoiceDate === '-' ? '-' : formatDate(new Date(invoiceDate))
   const invoiceNumber = getValue(params.invoice_number) || '-'
   
   const buyerName = getValue(params.buyer_name) || '-'
@@ -107,7 +109,7 @@ export default async function InvoicePreviewPage({ searchParams }: Props) {
             </div>
             <h2 className="text-lg font-bold uppercase tracking-wide text-slate-900">TAX INVOICE</h2>
             <p className="text-xs text-slate-600">
-              <span className="font-semibold">Date:</span> {invoiceDate}
+              <span className="font-semibold">Date:</span> {formatedDate}
             </p>
             <p className="text-xs text-slate-600">
               <span className="font-semibold">INVOICE NUMBER:</span> {invoiceNumber}

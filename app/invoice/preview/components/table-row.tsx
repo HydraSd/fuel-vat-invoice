@@ -1,5 +1,6 @@
 import React from "react";
 import { extendedAmount } from "../utils/extended";
+import { currency } from "../utils/currency-convertor";
 
 type Props = {
   productType?: "petrol" | "diesel" | "both" | string;
@@ -75,13 +76,13 @@ export default function TableRow({
               {row.quantity.toFixed(2)}
             </td>
             <td style={{ ...cellStyle, textAlign: "center" }}>
-              {row.unitPrice.toFixed(2)}
+              {currency(row.unitPrice)}
             </td>
             <td style={{ ...cellStyle, textAlign: "right" }}>
-              {extended.toFixed(2)}
+              {currency(extended)}
             </td>
             <td style={{ ...cellStyle, textAlign: "right" }}>
-              {total.toFixed(2)}
+              {currency(total)}
             </td>
           </tr>
         );
