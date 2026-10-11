@@ -16,24 +16,34 @@ const TaxInvoice = (data: Invoice) => {
 
   return (
     <>
-      {/* Print styles specifically tailored for A5 Landscape (Full A4 width, Half A4 height) */}
+      {/* Print styles tailored for A5 Landscape with mobile compatibility */}
       <style jsx global>{`
         @page {
-          size: A5 landscape;
+          size: 210mm 148.5mm; /* Explicit width and height for strict printer compliance */
           margin: 0;
         }
+        
         @media print {
-          body {
-            margin: 0;
-            padding: 0;
+          html, body {
+            width: 210mm;
+            height: 148.5mm;
+            margin: 0 !important;
+            padding: 0 !important;
             -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
           }
+
           .invoice-container {
-            width: 100% !important;
+            width: 210mm !important;
             max-width: 210mm !important;
-            min-height: 148mm !important;
+            min-height: 148.5mm !important;
+            max-height: 148.5mm !important;
             box-shadow: none !important;
-            padding: 12px !important;
+            padding: 10px !important;
+            margin: 0 !important;
+            position: absolute;
+            left: 0;
+            top: 0;
           }
         }
       `}</style>
@@ -43,7 +53,7 @@ const TaxInvoice = (data: Invoice) => {
         style={{
           fontFamily: "Arial, Helvetica, sans-serif",
           width: "100%",
-          maxWidth: "210mm", /* Full A4 width / A5 Landscape width */
+          maxWidth: "210mm",
           margin: "0 auto",
           padding: "12px",
           backgroundColor: "#fff",
@@ -414,15 +424,17 @@ const TaxInvoice = (data: Invoice) => {
                 style={{
                   border: "1px solid #000",
                   borderTop: "none",
-                  padding: "4px 6px",
+                  padding: "6px 12px",
                   lineHeight: "1.3",
                 }}
               >
                 <div>
-                  <strong>BANK NAME:</strong> COMMERCIAL BANK OF CEYLON
+                  <strong>BANKNAME:</strong> COMMERCIAL BANK OF CEYLON
                 </div>
                 <div>
-                  <strong>BANK BRANCH:</strong> MIRIGAMA BRANCH |{" "}
+                  <strong>BANK BRANCH:</strong> MIRIGAMA BRANCH
+                </div>
+                <div>
                   <strong>A/C NO:</strong> 1000358108
                 </div>
                 <div>
