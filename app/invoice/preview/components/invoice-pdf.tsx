@@ -16,10 +16,10 @@ const TaxInvoice = (data: Invoice) => {
 
   return (
     <>
-      {/* Print styles specifically tailored for A5 or Half-A4 sheet */}
+      {/* Print styles specifically tailored for A5 Landscape (Full A4 width, Half A4 height) */}
       <style jsx global>{`
         @page {
-          size: A5 portrait;
+          size: A5 landscape;
           margin: 0;
         }
         @media print {
@@ -30,8 +30,8 @@ const TaxInvoice = (data: Invoice) => {
           }
           .invoice-container {
             width: 100% !important;
-            max-width: 148mm !important;
-            min-height: 210mm !important;
+            max-width: 210mm !important;
+            min-height: 148mm !important;
             box-shadow: none !important;
             padding: 12px !important;
           }
@@ -43,7 +43,7 @@ const TaxInvoice = (data: Invoice) => {
         style={{
           fontFamily: "Arial, Helvetica, sans-serif",
           width: "100%",
-          maxWidth: "148mm", /* A5 Width / Half-A4 */
+          maxWidth: "210mm", /* Full A4 width / A5 Landscape width */
           margin: "0 auto",
           padding: "12px",
           backgroundColor: "#fff",
@@ -458,29 +458,6 @@ const TaxInvoice = (data: Invoice) => {
             </tr>
           </tbody>
         </table>
-
-        {/* Signature area */}
-        <div
-          style={{
-            marginTop: "16px",
-            textAlign: "center",
-            fontSize: "10px",
-          }}
-        >
-          {/* <div
-            style={{
-              fontFamily: "cursive, 'Segoe Script', 'Brush Script MT', serif",
-              fontSize: "14px",
-              marginBottom: "2px",
-              minHeight: "20px",
-            }}
-          >
-            ________________________
-          </div> */}
-          {/* <div style={{ fontSize: "10px", color: "#333" }}>
-            Signature and Stamp
-          </div> */}
-        </div>
       </div>
     </>
   );
