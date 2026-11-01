@@ -52,9 +52,9 @@ function formatDate(value: string | null) {
 
 function StatusLabel({ status }: { status: string | null }) {
   const styles: Record<string, string> = {
-    issued: "border-green-200 bg-green-50 text-green-700",
-    draft: "border-yellow-200 bg-yellow-50 text-yellow-700",
-    void: "border-red-200 bg-red-50 text-red-700",
+    issued: "border-emerald-300/20 bg-emerald-300/[0.08] text-emerald-200",
+    draft: "border-amber-300/20 bg-amber-300/[0.08] text-amber-200",
+    void: "border-red-300/20 bg-red-300/[0.08] text-red-200",
   };
 
   const normalizedStatus = status?.toLowerCase() ?? "";
@@ -62,7 +62,7 @@ function StatusLabel({ status }: { status: string | null }) {
   return (
     <span
       className={`inline-block rounded-full border px-2.5 py-1 text-xs capitalize ${
-        styles[normalizedStatus] ?? "border-gray-200 text-gray-700"
+        styles[normalizedStatus] ?? "border-white/10 bg-white/[0.04] text-slate-300"
       }`}
     >
       {status || "Unknown"}
@@ -192,26 +192,26 @@ export default async function InvoicesPage({ searchParams }: Props) {
   const hasFilters = Boolean(search || status || fuel || from || to);
 
   return (
-    <main className="min-h-screen bg-white text-black">
+    <main className="min-h-screen bg-[#080b10] text-slate-100">
       {/* Header */}
-      <header className="border-b border-gray-200">
+      <header className="border-b border-white/[0.07]">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
           <div>
             <Link
               href="/dashboard"
-              className="text-xl font-bold tracking-tight"
+              className="text-xl font-semibold tracking-tight text-white"
             >
               Fuel VAT Manager
             </Link>
 
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-slate-500">
               {station.station_name} / Invoice Management
             </p>
           </div>
 
           <Link
             href="/dashboard"
-            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-100"
+            className="rounded-lg border border-white/10 px-4 py-2 text-sm font-medium text-slate-300 transition hover:border-white/20 hover:bg-white/[0.05] hover:text-white"
           >
             Dashboard
           </Link>
@@ -226,14 +226,14 @@ export default async function InvoicesPage({ searchParams }: Props) {
               Invoices
             </h2>
 
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="mt-2 text-sm text-slate-400">
               Search, filter, view, and manage your saved fuel VAT invoices.
             </p>
           </div>
 
           <Link
             href="/invoice/form"
-            className="rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+            className="rounded-lg bg-emerald-300 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-200"
           >
             + Create Invoice
           </Link>
@@ -241,14 +241,14 @@ export default async function InvoicesPage({ searchParams }: Props) {
 
         {/* Success message */}
         {deleted === "1" && (
-          <div className="mb-6 rounded-lg border border-green-300 bg-green-50 p-4 text-sm text-green-800">
+          <div className="mb-6 rounded-lg border border-emerald-300/20 bg-emerald-300/[0.07] p-4 text-sm text-emerald-200">
             Invoice deleted successfully.
           </div>
         )}
 
         {/* Error messages */}
         {errorMessage && (
-          <div className="mb-6 rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-800">
+          <div className="mb-6 rounded-lg border border-red-300/20 bg-red-300/[0.07] p-4 text-sm text-red-200">
             {errorMessage === "invalid" &&
               "Invalid invoice selected."}
 
@@ -265,8 +265,8 @@ export default async function InvoicesPage({ searchParams }: Props) {
 
         {/* Summary */}
         <section className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <div className="rounded-xl border border-gray-200 p-6">
-            <p className="text-sm text-gray-500">
+          <div className="rounded-2xl border border-white/[0.08] bg-[#0e1219] p-6">
+            <p className="text-sm text-slate-400">
               Matching Invoices
             </p>
 
@@ -275,8 +275,8 @@ export default async function InvoicesPage({ searchParams }: Props) {
             </p>
           </div>
 
-          <div className="rounded-xl border border-gray-200 p-6">
-            <p className="text-sm text-gray-500">
+          <div className="rounded-2xl border border-white/[0.08] bg-[#0e1219] p-6">
+            <p className="text-sm text-slate-400">
               Matching Sales (excluding void invoices)
             </p>
 
@@ -287,11 +287,11 @@ export default async function InvoicesPage({ searchParams }: Props) {
         </section>
 
         {/* Search and filters */}
-        <section className="mb-8 rounded-xl border border-gray-200 p-6">
+        <section className="mb-8 rounded-2xl border border-white/[0.08] bg-[#0e1219] p-6">
           <div className="mb-5">
             <h3 className="font-semibold">Search and Filters</h3>
 
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-slate-500">
               Find invoices using invoice details, status, fuel type, or date.
             </p>
           </div>
@@ -313,7 +313,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
                   type="search"
                   defaultValue={search}
                   placeholder="Invoice number, buyer name, or TIN..."
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-black"
+                  className="w-full rounded-lg border border-white/10 bg-[#0b0f15] px-4 py-3 text-sm text-slate-100 outline-none placeholder:text-slate-600 focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10"
                 />
               </div>
 
@@ -330,7 +330,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
                   id="status"
                   name="status"
                   defaultValue={status}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-black"
+                  className="w-full rounded-lg border border-white/10 bg-[#0b0f15] px-4 py-3 text-sm text-slate-100 outline-none focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10"
                 >
                   <option value="">All statuses</option>
                   <option value="issued">Issued</option>
@@ -352,7 +352,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
                   id="fuel"
                   name="fuel"
                   defaultValue={fuel}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-black"
+                  className="w-full rounded-lg border border-white/10 bg-[#0b0f15] px-4 py-3 text-sm text-slate-100 outline-none focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10"
                 >
                   <option value="">All fuel types</option>
                   <option value="petrol">Petrol</option>
@@ -375,7 +375,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
                   name="from"
                   type="date"
                   defaultValue={from}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-black"
+                  className="w-full rounded-lg border border-white/10 bg-[#0b0f15] px-4 py-3 text-sm text-slate-100 outline-none focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10"
                 />
               </div>
 
@@ -393,7 +393,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
                   name="to"
                   type="date"
                   defaultValue={to}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-black"
+                  className="w-full rounded-lg border border-white/10 bg-[#0b0f15] px-4 py-3 text-sm text-slate-100 outline-none focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10"
                 />
               </div>
             </div>
@@ -401,14 +401,14 @@ export default async function InvoicesPage({ searchParams }: Props) {
             <div className="mt-5 flex flex-wrap items-center gap-3">
               <button
                 type="submit"
-                className="rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+                className="rounded-lg bg-emerald-300 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-200"
               >
                 Search / Filter
               </button>
 
               <Link
                 href="/invoice"
-                className="rounded-lg border border-gray-300 px-6 py-3 text-sm font-semibold hover:bg-gray-100"
+                className="rounded-lg border border-white/10 px-6 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/[0.05] hover:text-white"
               >
                 Reset Filters
               </Link>
@@ -417,12 +417,12 @@ export default async function InvoicesPage({ searchParams }: Props) {
         </section>
 
         {/* Invoice table */}
-        <section className="overflow-hidden rounded-xl border border-gray-200">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 px-6 py-4">
+        <section className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0e1219]">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] px-6 py-4">
             <div>
               <h3 className="font-semibold">Invoice Records</h3>
 
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-slate-500">
                 {invoiceList.length} matching invoice record(s)
                 {hasFilters ? " after applying filters" : ""}
               </p>
@@ -435,7 +435,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
                 {hasFilters ? "No matching invoices" : "No invoices found"}
               </h3>
 
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-slate-400">
                 {hasFilters
                   ? "Try changing your search or filter options."
                   : "Your saved invoices will appear here."}
@@ -444,14 +444,14 @@ export default async function InvoicesPage({ searchParams }: Props) {
               {hasFilters ? (
                 <Link
                   href="/invoice"
-                  className="mt-5 inline-block rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium hover:bg-gray-100"
+                  className="mt-5 inline-block rounded-lg border border-white/10 px-5 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/[0.05] hover:text-white"
                 >
                   Clear Filters
                 </Link>
               ) : (
                 <Link
                   href="/invoice/form"
-                  className="mt-5 inline-block rounded-lg bg-black px-5 py-2.5 text-sm font-medium text-white"
+                  className="mt-5 inline-block rounded-lg bg-emerald-300 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-emerald-200"
                 >
                   Create Your First Invoice
                 </Link>
@@ -460,7 +460,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full min-w-[1050px] text-left text-sm">
-                <thead className="border-b border-gray-200 bg-gray-50 text-xs uppercase text-gray-500">
+                <thead className="border-b border-white/[0.08] bg-white/[0.025] text-xs uppercase tracking-wide text-slate-500">
                   <tr>
                     <th className="px-5 py-4">Invoice Number</th>
                     <th className="px-5 py-4">Date</th>
@@ -472,7 +472,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-white/[0.06]">
                   {invoiceList.map((invoice) => {
                     const params = new URLSearchParams();
 
@@ -526,13 +526,13 @@ export default async function InvoicesPage({ searchParams }: Props) {
                     return (
                       <tr
                         key={invoice.id}
-                        className="transition hover:bg-gray-50"
+                        className="transition hover:bg-white/[0.03]"
                       >
                         <td className="px-5 py-4 font-medium">
                           {invoice.invoice_number}
                         </td>
 
-                        <td className="px-5 py-4 text-gray-600">
+                        <td className="px-5 py-4 text-slate-400">
                           {formatDate(invoice.invoice_date)}
                         </td>
 
@@ -540,13 +540,13 @@ export default async function InvoicesPage({ searchParams }: Props) {
                           <div>{invoice.buyer_name}</div>
 
                           {invoice.buyer_tin && (
-                            <div className="mt-1 text-xs text-gray-500">
+                            <div className="mt-1 text-xs text-slate-500">
                               TIN: {invoice.buyer_tin}
                             </div>
                           )}
                         </td>
 
-                        <td className="px-5 py-4 capitalize text-gray-600">
+                        <td className="px-5 py-4 capitalize text-slate-400">
                           {invoice.product_type === "both"
                             ? "Petrol & Diesel"
                             : invoice.product_type}
@@ -564,7 +564,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
                           <div className="flex items-center justify-end gap-4">
                             <Link
                               href={previewUrl}
-                              className="whitespace-nowrap font-semibold underline underline-offset-4 hover:text-gray-600"
+                              className="whitespace-nowrap font-semibold text-emerald-300 underline underline-offset-4 hover:text-emerald-200"
                             >
                               View / Print
                             </Link>
@@ -584,7 +584,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
         <div className="mt-6">
           <Link
             href="/dashboard"
-            className="text-sm text-gray-500 hover:text-black"
+            className="text-sm text-slate-400 transition hover:text-white"
           >
             ← Back to Dashboard
           </Link>

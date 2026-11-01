@@ -149,15 +149,15 @@ export default async function DashboardPage() {
   const recentInvoices = recentInvoicesResult.data ?? [];
 
   return (
-    <main className="min-h-screen bg-white text-black">
+    <main className="min-h-screen bg-[#080b10] text-slate-100">
       {/* Header */}
-      <header className="border-b border-gray-200">
+      <header className="border-b border-white/[0.07]">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
           <div>
             <h1 className="text-xl font-bold tracking-tight">
-              Fuel VAT Manager
+              <span className="text-white">Fuel VAT Manager</span>
             </h1>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-slate-500">
               Station Management Dashboard
             </p>
           </div>
@@ -165,7 +165,7 @@ export default async function DashboardPage() {
           <form action="/logout" method="POST">
             <button
               type="submit"
-              className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-100"
+              className="rounded-lg border border-white/10 px-4 py-2 text-sm font-medium text-slate-300 transition hover:border-white/20 hover:bg-white/[0.05] hover:text-white"
             >
               Logout
             </button>
@@ -176,13 +176,13 @@ export default async function DashboardPage() {
       <div className="mx-auto max-w-7xl px-6 py-10">
         {/* Welcome */}
         <section className="mb-10">
-          <p className="text-sm text-gray-500">Welcome back</p>
+          <p className="text-sm text-slate-400">Welcome back</p>
 
           <h2 className="mt-1 text-3xl font-bold tracking-tight">
             {station.station_name}
           </h2>
 
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-slate-400">
             {station.address}
           </p>
         </section>
@@ -246,37 +246,37 @@ export default async function DashboardPage() {
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <div>
               <h3 className="text-lg font-semibold">Recent Invoices</h3>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-slate-500">
                 Your latest saved invoice records
               </p>
             </div>
 
             <Link
               href="/invoice"
-              className="text-sm font-semibold underline underline-offset-4"
+              className="text-sm font-semibold text-emerald-300 underline underline-offset-4 transition hover:text-emerald-200"
             >
               View all invoices →
             </Link>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-gray-200">
+          <div className="overflow-x-auto rounded-2xl border border-white/[0.08] bg-[#0e1219]">
             {recentInvoices.length === 0 ? (
               <div className="p-10 text-center">
                 <p className="font-medium">No invoices yet</p>
-                <p className="mt-2 text-sm text-gray-500">
+                <p className="mt-2 text-sm text-slate-400">
                   Create your first invoice to see it here.
                 </p>
 
                 <Link
                   href="/invoice/form"
-                  className="mt-5 inline-block rounded-lg bg-black px-5 py-2 text-sm font-medium text-white"
+                  className="mt-5 inline-block rounded-lg bg-emerald-300 px-5 py-2 text-sm font-semibold text-slate-950 transition hover:bg-emerald-200"
                 >
                   Create Invoice
                 </Link>
               </div>
             ) : (
               <table className="w-full min-w-[650px] text-left text-sm">
-                <thead className="border-b border-gray-200 bg-gray-50 text-xs uppercase text-gray-500">
+                <thead className="border-b border-white/[0.08] bg-white/[0.025] text-xs uppercase tracking-wide text-slate-500">
                   <tr>
                     <th className="px-5 py-4">Invoice Number</th>
                     <th className="px-5 py-4">Date</th>
@@ -287,14 +287,14 @@ export default async function DashboardPage() {
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-white/[0.06]">
                   {recentInvoices.map((invoice) => (
-                    <tr key={invoice.id} className="hover:bg-gray-50">
+                    <tr key={invoice.id} className="transition hover:bg-white/[0.03]">
                       <td className="px-5 py-4 font-medium">
                         {invoice.invoice_number}
                       </td>
 
-                      <td className="px-5 py-4 text-gray-600">
+                      <td className="px-5 py-4 text-slate-400">
                         {formatDate(invoice.invoice_date)}
                       </td>
 
@@ -313,7 +313,7 @@ export default async function DashboardPage() {
                       <td className="px-5 py-4 text-right">
                         <Link
                           href={`/invoice`}
-                          className="font-medium underline underline-offset-4"
+                          className="font-medium text-emerald-300 underline underline-offset-4 hover:text-emerald-200"
                         >
                           View
                         </Link>
@@ -327,7 +327,7 @@ export default async function DashboardPage() {
         </section>
 
         {/* Station Information */}
-        <section className="mt-12 rounded-xl border border-gray-200 p-6">
+        <section className="mt-12 rounded-2xl border border-white/[0.08] bg-[#0e1219] p-6">
           <h3 className="mb-5 text-lg font-semibold">
             Station Information
           </h3>
@@ -374,10 +374,10 @@ function DashboardCard({
   value: string;
 }) {
   return (
-    <div className="rounded-xl border border-gray-200 p-6">
-      <p className="text-sm font-medium text-gray-500">{title}</p>
-      <p className="mt-4 break-words text-3xl font-bold">{value}</p>
-      <p className="mt-2 text-xs text-gray-400">{description}</p>
+    <div className="rounded-2xl border border-white/[0.08] bg-[#0e1219] p-6">
+      <p className="text-sm font-medium text-slate-400">{title}</p>
+      <p className="mt-4 break-words text-3xl font-semibold tracking-tight text-white">{value}</p>
+      <p className="mt-2 text-xs text-slate-500">{description}</p>
     </div>
   );
 }
@@ -394,11 +394,11 @@ function QuickAction({
   return (
     <Link
       href={href}
-      className="group rounded-xl border border-gray-200 p-5 transition hover:border-black"
+      className="group rounded-2xl border border-white/[0.08] bg-[#0e1219] p-5 transition hover:-translate-y-0.5 hover:border-emerald-300/25 hover:bg-[#111821]"
     >
       <h4 className="font-semibold group-hover:underline">{title}</h4>
-      <p className="mt-2 text-sm text-gray-500">{description}</p>
-      <p className="mt-5 text-sm font-medium">Open →</p>
+      <p className="mt-2 text-sm text-slate-400">{description}</p>
+      <p className="mt-5 text-sm font-medium text-emerald-300">Open →</p>
     </Link>
   );
 }
@@ -412,10 +412,10 @@ function InfoItem({
 }) {
   return (
     <div>
-      <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
+      <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
         {label}
       </p>
-      <p className="mt-2 text-sm font-medium">
+      <p className="mt-2 text-sm font-medium text-slate-200">
         {value || "Not provided"}
       </p>
     </div>
@@ -424,9 +424,16 @@ function InfoItem({
 
 function StatusLabel({ status }: { status: string | null }) {
   const normalized = (status || "unknown").toLowerCase();
+  const styles: Record<string, string> = {
+    issued: "border-emerald-300/20 bg-emerald-300/[0.08] text-emerald-200",
+    draft: "border-amber-300/20 bg-amber-300/[0.08] text-amber-200",
+    void: "border-red-300/20 bg-red-300/[0.08] text-red-200",
+  };
 
   return (
-    <span className="inline-block rounded-full border border-gray-200 px-2.5 py-1 text-xs capitalize text-gray-700">
+    <span className={`inline-block rounded-full border px-2.5 py-1 text-xs capitalize ${
+      styles[normalized] ?? "border-white/10 bg-white/[0.04] text-slate-300"
+    }`}>
       {normalized}
     </span>
   );

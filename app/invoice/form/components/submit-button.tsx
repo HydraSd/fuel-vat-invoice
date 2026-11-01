@@ -18,11 +18,11 @@ export function SubmitButton({ form } : SubmitButtonProps) {
       className={`
         relative w-full flex items-center justify-center gap-2 px-5 py-3 
         font-medium text-sm transition-all duration-200 rounded-lg shadow-sm
-        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black
+        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-300 focus:ring-offset-[#080b10]
         ${
           pending
-            ? 'bg-neutral-800 text-neutral-400 cursor-not-allowed opacity-90'
-            : 'bg-black text-white hover:bg-neutral-800 active:scale-[0.99] cursor-pointer'
+            ? 'bg-emerald-300/50 text-slate-900 cursor-not-allowed opacity-90'
+            : 'bg-emerald-300 text-slate-950 hover:bg-emerald-200 active:scale-[0.99] cursor-pointer'
         }
       `}
     >

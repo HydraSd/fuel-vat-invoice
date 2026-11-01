@@ -284,10 +284,10 @@ const TaxInvoice = (data: Invoice) => {
           <tbody>
             <TableRow
               productType={data.productType}
-              petrolUnitPrice={data.petrolUnitPrice}
-              petrolQuantity={data.petrolQuantity}
-              dieselUnitPrice={data.dieselUnitPrice}
-              dieselQuantity={data.dieselQuantity}
+              petrolUnitPrice={data.petrolUnitPrice ?? 0}
+              petrolQuantity={data.petrolQuantity ?? 0}
+              dieselUnitPrice={data.dieselUnitPrice ?? 0}
+              dieselQuantity={data.dieselQuantity ?? 0}
             />
           </tbody>
         </table>

@@ -28,7 +28,7 @@ export default function DeleteInvoiceButton({
 
       <button
         type="submit"
-        className="whitespace-nowrap font-semibold text-red-600 underline underline-offset-4 hover:text-red-800"
+        className="whitespace-nowrap font-semibold text-red-300 underline underline-offset-4 hover:text-red-200"
       >
         Delete
       </button>

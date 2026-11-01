@@ -14,9 +14,9 @@ const productOptions: { value: ProductType; label: string }[] = [
 ]
 
 const inputClass =
-  'mt-1.5 h-11 w-full rounded-md border border-zinc-200 bg-white px-3.5 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10'
+  'mt-1.5 h-11 w-full rounded-md border border-white/10 bg-[#0b0f15] px-3.5 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10'
 
-const labelClass = 'text-xs font-medium tracking-tight text-zinc-700'
+const labelClass = 'text-xs font-medium tracking-tight text-slate-300'
 const STORAGE_KEY = 'vat-invoice-form-state'
 
 type Customer = {
@@ -247,20 +247,20 @@ export default function VatInvoiceForm() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-zinc-950 antialiased pb-24 sm:pb-12">
+    <div className="min-h-screen bg-[#080b10] text-slate-100 antialiased pb-24 sm:pb-12">
       {/* Header */}
-      <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white/95 backdrop-blur-sm">
+      <header className="sticky top-0 z-30 border-b border-white/[0.07] bg-[#080b10]/95 backdrop-blur-sm">
         <div className="mx-auto flex h-14 max-w-2xl items-center justify-between px-4 sm:h-16">
           <div>
-            <h1 className="text-sm font-bold uppercase tracking-wider text-zinc-950 sm:text-base">
+            <h1 className="text-sm font-semibold uppercase tracking-wider text-white sm:text-base">
               VAT Invoice
             </h1>
-            <p className="text-xs text-zinc-500">
+            <p className="text-xs text-slate-500">
               Fuel tax invoice generator
             </p>
           </div>
 
-          <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-xs font-semibold text-zinc-800">
+          <span className="rounded-full border border-emerald-300/15 bg-emerald-300/[0.06] px-2.5 py-1 text-xs font-semibold text-emerald-200">
             Lakmini Enterprises
           </span>
         </div>
@@ -269,7 +269,7 @@ export default function VatInvoiceForm() {
       <main className="mx-auto max-w-2xl px-4 py-4 sm:py-6">
         <form id="invoice-form" onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Section 01: Invoice Details */}
-          <section className="rounded-lg border border-zinc-200 bg-white p-4 shadow-xs sm:p-6">
+          <section className="rounded-2xl border border-white/[0.08] bg-[#0e1219] p-4 shadow-xs sm:p-6">
             <SectionHeader number="01" title="Invoice Details" />
 
             <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
@@ -318,7 +318,7 @@ export default function VatInvoiceForm() {
                   Fuel Selection <Required />
                 </label>
 
-                <div className="mt-1.5 grid grid-cols-3 gap-1 rounded-md bg-zinc-100 p-1">
+                <div className="mt-1.5 grid grid-cols-3 gap-1 rounded-md border border-white/[0.06] bg-[#090d12] p-1">
                   {productOptions.map((option) => {
                     const active = formState.selectedProduct === option.value
 
@@ -328,8 +328,8 @@ export default function VatInvoiceForm() {
                         type="button"
                         onClick={() => handleProductTypeChange(option.value)}
                         className={`h-9 rounded text-xs font-semibold transition ${active
-                          ? 'bg-zinc-950 text-white shadow-xs'
-                          : 'text-zinc-600 hover:text-zinc-950'
+                          ? 'bg-emerald-300 text-slate-950 shadow-xs'
+                          : 'text-slate-400 hover:text-white'
                           }`}
                       >
                         {option.label}
@@ -348,7 +348,7 @@ export default function VatInvoiceForm() {
           </section>
 
           {/* Section 02: Buyer Details */}
-          <section className="rounded-lg border border-zinc-200 bg-white p-4 shadow-xs sm:p-6">
+          <section className="rounded-2xl border border-white/[0.08] bg-[#0e1219] p-4 shadow-xs sm:p-6">
             <SectionHeader number="02" title="Buyer Information" />
 
             <div className="space-y-3.5 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
@@ -401,7 +401,7 @@ export default function VatInvoiceForm() {
                   </p>
                 )}
 
-                <p className="mt-1.5 text-xs text-zinc-500">
+                <p className="mt-1.5 text-xs text-slate-500">
                   Select a saved customer to automatically fill in their details.
                 </p>
               </div>
@@ -489,14 +489,14 @@ export default function VatInvoiceForm() {
                   placeholder="Street address, city"
                   autoComplete="street-address"
                   required
-                  className="mt-1.5 w-full resize-none rounded-md border border-zinc-200 bg-white p-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10"
+                  className="mt-1.5 w-full resize-none rounded-md border border-white/10 bg-[#0b0f15] p-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10"
                 />
               </div>
             </div>
           </section>
 
           {/* Section 03: Fuel Quantities */}
-          <section className="rounded-lg border border-zinc-200 bg-white p-4 shadow-xs sm:p-6">
+          <section className="rounded-2xl border border-white/[0.08] bg-[#0e1219] p-4 shadow-xs sm:p-6">
             <SectionHeader number="03" title="Fuel Quantities & Rates" />
 
             <div className="space-y-3.5">
@@ -547,38 +547,38 @@ export default function VatInvoiceForm() {
           </section>
 
           {/* Summary Box */}
-          <section className="rounded-lg bg-zinc-950 p-4 text-white shadow-md sm:p-6">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+          <section className="rounded-2xl border border-emerald-300/15 bg-[#111a1b] p-4 text-white shadow-md sm:p-6">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
                 <h2 className="text-sm font-semibold tracking-wide uppercase">
                   Tax Summary
                 </h2>
-                <p className="text-xs text-zinc-400">
+                <p className="text-xs text-slate-400">
                   Standard VAT Rate Applied
                 </p>
               </div>
 
-              <span className="rounded bg-zinc-800 px-2 py-1 font-mono text-xs font-medium text-zinc-300">
+              <span className="rounded bg-emerald-300/10 px-2 py-1 font-mono text-xs font-medium text-emerald-200">
                 18% VAT
               </span>
             </div>
 
             <div className="mt-3.5 space-y-2 text-xs sm:text-sm">
-              <div className="flex justify-between text-zinc-400">
+              <div className="flex justify-between text-slate-400">
                 <span>Subtotal</span>
-                <span className="font-mono text-zinc-200">
+                <span className="font-mono text-slate-200">
                   {money(subtotal)}
                 </span>
               </div>
 
-              <div className="flex justify-between text-zinc-400">
+              <div className="flex justify-between text-slate-400">
                 <span>VAT (18%)</span>
-                <span className="font-mono text-zinc-200">
+                <span className="font-mono text-slate-200">
                   {money(vatAmount)}
                 </span>
               </div>
 
-              <div className="flex items-end justify-between border-t border-zinc-800 pt-3">
+              <div className="flex items-end justify-between border-t border-white/10 pt-3">
                 <span className="text-sm font-bold uppercase tracking-wider text-white">
                   Total Payable
                 </span>
@@ -597,13 +597,13 @@ export default function VatInvoiceForm() {
       </main>
 
       {/* Mobile Sticky Bottom Bar */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-zinc-200 bg-white/95 backdrop-blur-md p-3 shadow-lg sm:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#080b10]/95 p-3 shadow-lg backdrop-blur-md sm:hidden">
         <div className="mx-auto flex items-center justify-between gap-3">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
               Total Amount
             </p>
-            <p className="font-mono text-lg font-bold tracking-tight text-zinc-950">
+            <p className="font-mono text-lg font-bold tracking-tight text-white">
               {money(total)}
             </p>
           </div>
@@ -626,11 +626,11 @@ function SectionHeader({
 }) {
   return (
     <div className="mb-4 flex items-center gap-2.5">
-      <span className="flex h-6 w-6 items-center justify-center rounded bg-zinc-950 text-[11px] font-mono font-bold text-white">
+      <span className="flex h-6 w-6 items-center justify-center rounded bg-emerald-300 text-[11px] font-mono font-bold text-slate-950">
         {number}
       </span>
 
-      <h2 className="text-sm font-bold tracking-tight text-zinc-950 uppercase">
+      <h2 className="text-sm font-bold tracking-tight text-white uppercase">
         {title}
       </h2>
     </div>
@@ -638,7 +638,7 @@ function SectionHeader({
 }
 
 function Required() {
-  return <span className="text-zinc-950 font-bold">*</span>
+  return <span className="font-bold text-emerald-300">*</span>
 }
 
 function FuelCard({
@@ -661,14 +661,14 @@ function FuelCard({
   const lineSubtotal = priceValue * quantityValue
 
   return (
-    <div className="rounded-md border border-zinc-200 bg-zinc-50/50 p-3 sm:p-4">
-      <div className="flex items-center justify-between gap-2 border-b border-zinc-200/80 pb-2">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-900">
+    <div className="rounded-xl border border-white/[0.08] bg-white/[0.025] p-3 sm:p-4">
+      <div className="flex items-center justify-between gap-2 border-b border-white/[0.08] pb-2">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">
           {title}
         </h3>
 
         {lineSubtotal > 0 && (
-          <span className="font-mono text-xs font-semibold text-zinc-900">
+          <span className="font-mono text-xs font-semibold text-emerald-200">
             {lineSubtotal.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
@@ -697,9 +697,9 @@ function FuelCard({
               onChange={(e) =>
                 onPriceChange(parseFloat(e.target.value) || 0)
               }
-              className="h-10 w-full rounded-md border border-zinc-200 bg-white pr-8 pl-3 text-right font-mono text-sm text-zinc-950 outline-none transition focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10"
+              className="h-10 w-full rounded-md border border-white/10 bg-[#0b0f15] pr-8 pl-3 text-right font-mono text-sm text-slate-100 outline-none transition focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10"
             />
-            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 font-mono text-xs text-zinc-400">
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 font-mono text-xs text-slate-500">
               /L
             </span>
           </div>
@@ -724,9 +724,9 @@ function FuelCard({
               onChange={(e) =>
                 onQuantityChange(parseFloat(e.target.value) || 0)
               }
-              className="h-10 w-full rounded-md border border-zinc-200 bg-white pr-7 pl-3 text-right font-mono text-sm text-zinc-950 outline-none transition focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10"
+              className="h-10 w-full rounded-md border border-white/10 bg-[#0b0f15] pr-7 pl-3 text-right font-mono text-sm text-slate-100 outline-none transition focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10"
             />
-            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 font-mono text-xs text-zinc-400">
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 font-mono text-xs text-slate-500">
               L
             </span>
           </div>

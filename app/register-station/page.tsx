@@ -55,32 +55,33 @@ export default function RegisterStationPage() {
   }
 
   const inputClass =
-    "w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-black outline-none transition placeholder:text-gray-400 focus:border-black focus:ring-1 focus:ring-black";
+    "w-full rounded-lg border border-white/10 bg-[#0b0f15] px-4 py-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10";
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-white px-4 py-10">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#080b10] px-4 py-10 text-slate-100">
+      <div aria-hidden="true" className="pointer-events-none absolute -top-48 left-1/2 size-[34rem] -translate-x-1/2 rounded-full bg-emerald-300/[0.07] blur-[110px]" />
       <div className="w-full max-w-xl">
 
         <div className="mb-8">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">
             Fuel VAT Invoice Manager
           </p>
 
-          <h1 className="text-3xl font-bold tracking-tight text-black">
+          <h1 className="text-3xl font-semibold tracking-tight text-white">
             Register Your Station
           </h1>
 
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-slate-400">
             Enter your fuel station information to get started.
           </p>
         </div>
 
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+        <div className="rounded-2xl border border-white/10 bg-[#11161e] p-6 shadow-2xl sm:p-8">
 
           <form onSubmit={handleSubmit} className="space-y-5">
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-black">
+              <label className="mb-2 block text-sm font-medium text-slate-200">
                 Station Name
               </label>
 
@@ -95,7 +96,7 @@ export default function RegisterStationPage() {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-black">
+              <label className="mb-2 block text-sm font-medium text-slate-200">
                 Station Address
               </label>
 
@@ -111,7 +112,7 @@ export default function RegisterStationPage() {
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-black">
+                <label className="mb-2 block text-sm font-medium text-slate-200">
                   TIN Number
                 </label>
 
@@ -126,7 +127,7 @@ export default function RegisterStationPage() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-black">
+                <label className="mb-2 block text-sm font-medium text-slate-200">
                   VAT Number
                 </label>
 
@@ -143,7 +144,7 @@ export default function RegisterStationPage() {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-black">
+              <label className="mb-2 block text-sm font-medium text-slate-200">
                 Station Account Number
               </label>
 
@@ -158,7 +159,7 @@ export default function RegisterStationPage() {
             </div>
 
             {message && (
-              <div className="rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-black">
+              <div className="rounded-lg border border-white/10 bg-white/[0.04] p-3 text-sm text-slate-200">
                 {message}
               </div>
             )}
@@ -166,7 +167,7 @@ export default function RegisterStationPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-black px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-lg bg-emerald-300 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-200 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? "Registering Station..." : "Register Station"}
             </button>
@@ -174,7 +175,7 @@ export default function RegisterStationPage() {
           </form>
         </div>
 
-        <p className="mt-6 text-center text-xs text-gray-400">
+        <p className="mt-6 text-center text-xs text-slate-500">
           Your station information will be securely associated with your account.
         </p>
 

@@ -68,13 +68,14 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-md rounded-xl bg-white p-8 shadow">
-        <h1 className="mb-2 text-2xl font-bold">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#080b10] p-4 text-slate-100">
+      <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 size-[28rem] -translate-x-1/2 rounded-full bg-emerald-300/[0.08] blur-[100px]" />
+      <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[#11161e] p-8 shadow-2xl">
+        <h1 className="mb-2 text-2xl font-semibold tracking-tight text-white">
           Welcome Back
         </h1>
 
-        <p className="mb-6 text-sm text-gray-500">
+        <p className="mb-6 text-sm text-slate-400">
           Login to manage your fuel station invoices.
         </p>
 
@@ -89,7 +90,7 @@ export default function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border p-3"
+              className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#0b0f15] p-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10"
               placeholder="you@example.com"
             />
           </div>
@@ -104,7 +105,7 @@ export default function LoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border p-3"
+              className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#0b0f15] p-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10"
               placeholder="Your password"
             />
           </div>
@@ -112,14 +113,14 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-blue-600 p-3 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+            className="w-full rounded-lg bg-emerald-300 p-3 font-semibold text-slate-950 transition hover:bg-emerald-200 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Checking your account..." : "Login"}
           </button>
         </form>
 
         {errorMessage && (
-          <p className="mt-4 text-sm text-red-600">
+          <p className="mt-4 rounded-lg border border-red-400/20 bg-red-400/[0.07] p-3 text-sm text-red-300">
             {errorMessage}
           </p>
         )}
