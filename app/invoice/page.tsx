@@ -193,31 +193,6 @@ export default async function InvoicesPage({ searchParams }: Props) {
 
   return (
     <main className="min-h-screen bg-[#080b10] text-slate-100">
-      {/* Header */}
-      <header className="border-b border-white/[0.07]">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <div>
-            <Link
-              href="/dashboard"
-              className="text-xl font-semibold tracking-tight text-white"
-            >
-              Fuel VAT Manager
-            </Link>
-
-            <p className="text-xs text-slate-500">
-              {station.station_name} / Invoice Management
-            </p>
-          </div>
-
-          <Link
-            href="/dashboard"
-            className="rounded-lg border border-white/10 px-4 py-2 text-sm font-medium text-slate-300 transition hover:border-white/20 hover:bg-white/[0.05] hover:text-white"
-          >
-            Dashboard
-          </Link>
-        </div>
-      </header>
-
       <div className="mx-auto max-w-7xl px-6 py-10">
         {/* Page title */}
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
