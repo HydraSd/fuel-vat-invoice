@@ -36,9 +36,9 @@ type SavedFormState = {
   buyerAddress: string
   selectedProduct: ProductType
   petrolPrice: number
-  petrolQty: number
+  petrolAmount: number
   dieselPrice: number
-  dieselQty: number
+  dieselAmount: number
 }
 
 function getDefaultInvoicePrefix(): string {
@@ -55,9 +55,9 @@ function getDefaultState(): SavedFormState {
     buyerAddress: '',
     selectedProduct: 'petrol',
     petrolPrice: 0,
-    petrolQty: 0,
+    petrolAmount: 0,
     dieselPrice: 0,
-    dieselQty: 0,
+    dieselAmount: 0,
   }
 }
 
@@ -73,6 +73,11 @@ function getInitialState(searchParams: URLSearchParams | null): SavedFormState {
         ? productTypeFromUrl
         : defaultState.selectedProduct
 
+    const petrolPrice = Number(params.get('petrol_unit_price') ?? '0')
+    const petrolQuantity = Number(params.get('petrol_quantity') ?? '0')
+    const dieselPrice = Number(params.get('diesel_unit_price') ?? '0')
+    const dieselQuantity = Number(params.get('diesel_quantity') ?? '0')
+
     return {
       invoiceNumber: params.get('invoice_number') ?? defaultState.invoiceNumber,
       invoiceDate: params.get('invoice_date') ?? defaultState.invoiceDate,
@@ -81,10 +86,14 @@ function getInitialState(searchParams: URLSearchParams | null): SavedFormState {
       buyerVatNumber: params.get('buyer_vat_number') ?? defaultState.buyerVatNumber,
       buyerAddress: params.get('buyer_address') ?? defaultState.buyerAddress,
       selectedProduct,
-      petrolPrice: Number(params.get('petrol_unit_price') ?? '0'),
-      petrolQty: Number(params.get('petrol_quantity') ?? '0'),
-      dieselPrice: Number(params.get('diesel_unit_price') ?? '0'),
-      dieselQty: Number(params.get('diesel_quantity') ?? '0'),
+      petrolPrice,
+      petrolAmount: Number(
+        params.get('petrol_total_amount') ?? String(petrolPrice * petrolQuantity)
+      ),
+      dieselPrice,
+      dieselAmount: Number(
+        params.get('diesel_total_amount') ?? String(dieselPrice * dieselQuantity)
+      ),
     }
   }
 
@@ -93,10 +102,25 @@ function getInitialState(searchParams: URLSearchParams | null): SavedFormState {
     const saved = sessionStorage.getItem(STORAGE_KEY)
     if (saved) {
       try {
-        const parsed = JSON.parse(saved) as Partial<SavedFormState>
+        const parsed = JSON.parse(saved) as Partial<SavedFormState> & {
+          petrolQty?: number
+          dieselQty?: number
+        }
+        const {
+          petrolQty: savedPetrolQty,
+          dieselQty: savedDieselQty,
+          ...savedState
+        } = parsed
+
         return {
           ...defaultState,
-          ...parsed,
+          ...savedState,
+          petrolAmount:
+            savedState.petrolAmount ??
+            (savedState.petrolPrice ?? 0) * (savedPetrolQty ?? 0),
+          dieselAmount:
+            savedState.dieselAmount ??
+            (savedState.dieselPrice ?? 0) * (savedDieselQty ?? 0),
         }
       } catch {
         // Fallback to default state on parse error
@@ -186,7 +210,7 @@ export default function VatInvoiceForm() {
         return {
           ...nextState,
           dieselPrice: 0,
-          dieselQty: 0,
+          dieselAmount: 0,
         }
       }
 
@@ -194,7 +218,7 @@ export default function VatInvoiceForm() {
         return {
           ...nextState,
           petrolPrice: 0,
-          petrolQty: 0,
+          petrolAmount: 0,
         }
       }
 
@@ -203,8 +227,8 @@ export default function VatInvoiceForm() {
   }
 
   const { subtotal, vatAmount, total } = useMemo(() => {
-    const petrolTotal = showPetrol ? formState.petrolPrice * formState.petrolQty : 0
-    const dieselTotal = showDiesel ? formState.dieselPrice * formState.dieselQty : 0
+    const petrolTotal = showPetrol ? formState.petrolAmount : 0
+    const dieselTotal = showDiesel ? formState.dieselAmount : 0
     const subtotal = ((petrolTotal + dieselTotal) / 118) * 100
     const vatAmount = subtotal * 0.18
 
@@ -216,10 +240,8 @@ export default function VatInvoiceForm() {
   }, [
     showPetrol,
     showDiesel,
-    formState.petrolPrice,
-    formState.petrolQty,
-    formState.dieselPrice,
-    formState.dieselQty,
+    formState.petrolAmount,
+    formState.dieselAmount,
   ])
 
   const money = (value: number) =>
@@ -495,28 +517,34 @@ export default function VatInvoiceForm() {
             </div>
           </section>
 
-          {/* Section 03: Fuel Quantities */}
+          {/* Section 03: Fuel Rates & Amounts */}
           <section className="rounded-2xl border border-white/[0.08] bg-[#0e1219] p-4 shadow-xs sm:p-6">
-            <SectionHeader number="03" title="Fuel Quantities & Rates" />
+            <SectionHeader number="03" title="Fuel Rates & Amounts" />
 
             <div className="space-y-3.5">
               {showPetrol && (
                 <FuelCard
                   title="Petrol"
                   priceName="petrol_unit_price"
+                  amountName="petrol_total_amount"
                   quantityName="petrol_quantity"
                   priceValue={formState.petrolPrice}
-                  quantityValue={formState.petrolQty}
+                  amountValue={formState.petrolAmount}
+                  quantityValue={
+                    formState.petrolPrice > 0
+                      ? formState.petrolAmount / formState.petrolPrice
+                      : 0
+                  }
                   onPriceChange={(value) =>
                     setFormState((previous) => ({
                       ...previous,
                       petrolPrice: value,
                     }))
                   }
-                  onQuantityChange={(value) =>
+                  onAmountChange={(value) =>
                     setFormState((previous) => ({
                       ...previous,
-                      petrolQty: value,
+                      petrolAmount: value,
                     }))
                   }
                 />
@@ -526,19 +554,25 @@ export default function VatInvoiceForm() {
                 <FuelCard
                   title="Diesel"
                   priceName="diesel_unit_price"
+                  amountName="diesel_total_amount"
                   quantityName="diesel_quantity"
                   priceValue={formState.dieselPrice}
-                  quantityValue={formState.dieselQty}
+                  amountValue={formState.dieselAmount}
+                  quantityValue={
+                    formState.dieselPrice > 0
+                      ? formState.dieselAmount / formState.dieselPrice
+                      : 0
+                  }
                   onPriceChange={(value) =>
                     setFormState((previous) => ({
                       ...previous,
                       dieselPrice: value,
                     }))
                   }
-                  onQuantityChange={(value) =>
+                  onAmountChange={(value) =>
                     setFormState((previous) => ({
                       ...previous,
-                      dieselQty: value,
+                      dieselAmount: value,
                     }))
                   }
                 />
@@ -644,21 +678,25 @@ function Required() {
 function FuelCard({
   title,
   priceName,
+  amountName,
   quantityName,
   priceValue,
+  amountValue,
   quantityValue,
   onPriceChange,
-  onQuantityChange,
+  onAmountChange,
 }: {
   title: string
   priceName: string
+  amountName: string
   quantityName: string
   priceValue: number
+  amountValue: number
   quantityValue: number
   onPriceChange: (value: number) => void
-  onQuantityChange: (value: number) => void
+  onAmountChange: (value: number) => void
 }) {
-  const lineSubtotal = priceValue * quantityValue
+  const lineSubtotal = amountValue
 
   return (
     <div className="rounded-xl border border-white/[0.08] bg-white/[0.025] p-3 sm:p-4">
@@ -687,7 +725,7 @@ function FuelCard({
             <input
               type="number"
               step="0.01"
-              min="0"
+              min="0.01"
               id={priceName}
               name={priceName}
               placeholder="0.00"
@@ -706,32 +744,41 @@ function FuelCard({
         </div>
 
         <div>
-          <label htmlFor={quantityName} className={labelClass}>
-            Quantity <Required />
+          <label htmlFor={amountName} className={labelClass}>
+            Total Amount <Required />
           </label>
 
           <div className="relative mt-1">
             <input
               type="number"
               step="0.01"
-              min="0"
-              id={quantityName}
-              name={quantityName}
+              min="0.01"
+              id={amountName}
+              name={amountName}
               placeholder="0.00"
               inputMode="decimal"
               required
-              value={quantityValue || ''}
+              value={amountValue || ''}
               onChange={(e) =>
-                onQuantityChange(parseFloat(e.target.value) || 0)
+                onAmountChange(parseFloat(e.target.value) || 0)
               }
-              className="h-10 w-full rounded-md border border-white/10 bg-[#0b0f15] pr-7 pl-3 text-right font-mono text-sm text-slate-100 outline-none transition focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10"
+              className="h-10 w-full rounded-md border border-white/10 bg-[#0b0f15] pr-10 pl-3 text-right font-mono text-sm text-slate-100 outline-none transition focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10"
             />
             <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 font-mono text-xs text-slate-500">
-              L
+              Rs.
             </span>
           </div>
         </div>
       </div>
+
+      <input type="hidden" name={quantityName} value={quantityValue} />
+      <p className="mt-2 text-right text-xs text-slate-500">
+        Calculated quantity:{' '}
+        {quantityValue.toLocaleString(undefined, {
+          maximumFractionDigits: 6,
+        })}{' '}
+        L
+      </p>
     </div>
   )
 }

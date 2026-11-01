@@ -556,7 +556,10 @@ export default async function InvoicePreviewPage({ searchParams }: Props) {
                   </td>
 
                   <td className="border border-slate-300 px-2 py-2 text-right">
-                    {petrolQuantity.toFixed(2)}
+                    {petrolQuantity.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 6,
+                    })}
                   </td>
 
                   <td className="border border-slate-300 px-2 py-2 text-right">
@@ -584,7 +587,10 @@ export default async function InvoicePreviewPage({ searchParams }: Props) {
                   </td>
 
                   <td className="border border-slate-300 px-2 py-2 text-right">
-                    {dieselQuantity.toFixed(2)}
+                    {dieselQuantity.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 6,
+                    })}
                   </td>
 
                   <td className="border border-slate-300 px-2 py-2 text-right">

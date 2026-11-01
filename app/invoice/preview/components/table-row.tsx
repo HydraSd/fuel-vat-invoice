@@ -73,7 +73,10 @@ export default function TableRow({
             <td style={{ ...cellStyle, textAlign: "center" }}>{index + 1}</td>
             <td style={cellStyle}>{row.name}</td>
             <td style={{ ...cellStyle, textAlign: "center" }}>
-              {row.quantity.toFixed(2)}
+              {row.quantity.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 6,
+              })}
             </td>
             <td style={{ ...cellStyle, textAlign: "center" }}>
               {currency(row.unitPrice)}
