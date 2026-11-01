@@ -1,5 +1,5 @@
 'use client'
-
+import { createClient } from '@/lib/supabase/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { SubmitButton } from './submit-button'
@@ -18,6 +18,14 @@ const inputClass =
 
 const labelClass = 'text-xs font-medium tracking-tight text-zinc-700'
 const STORAGE_KEY = 'vat-invoice-form-state'
+
+type Customer = {
+  id: string
+  customer_name: string
+  address: string
+  tin_number: string | null
+  vat_number: string | null
+}
 
 type SavedFormState = {
   invoiceNumber: string
@@ -56,7 +64,7 @@ function getDefaultState(): SavedFormState {
 function getInitialState(searchParams: URLSearchParams | null): SavedFormState {
   const defaultState = getDefaultState()
   const params = searchParams ?? new URLSearchParams()
-  
+
   // 1. Prioritize URL Search Params
   if (params.toString()) {
     const productTypeFromUrl = params.get('product_type')
@@ -108,11 +116,61 @@ export default function VatInvoiceForm() {
     getInitialState(searchParams)
   )
 
+  const supabase = useMemo(() => createClient(), [])
+
+  const [customers, setCustomers] = useState<Customer[]>([])
+  const [selectedCustomerId, setSelectedCustomerId] = useState('')
+  const [customersLoading, setCustomersLoading] = useState(true)
+  const [customerError, setCustomerError] = useState('')
+
   // Persist state changes to sessionStorage (external system sync)
   useEffect(() => {
     if (typeof window === 'undefined') return
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(formState))
-  }, [formState])
+    async function loadCustomers() {
+      setCustomersLoading(true)
+      setCustomerError('')
+
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser()
+
+      if (authError || !user) {
+        setCustomerError('Please log in to load your customers.')
+        setCustomersLoading(false)
+        return
+      }
+
+      const { data: station, error: stationError } = await supabase
+        .from('fuel_stations')
+        .select('id')
+        .eq('owner_id', user.id)
+        .maybeSingle()
+
+      if (stationError || !station) {
+        setCustomerError('Unable to find your registered station.')
+        setCustomersLoading(false)
+        return
+      }
+
+      const { data, error } = await supabase
+        .from('customers')
+        .select('id, customer_name, address, tin_number, vat_number')
+        .eq('station_id', station.id)
+        .order('customer_name')
+
+      if (error) {
+        setCustomerError(error.message)
+      } else {
+        setCustomers(data ?? [])
+      }
+
+      setCustomersLoading(false)
+    }
+
+    loadCustomers()
+  }, [formState, supabase])
 
   const showPetrol = formState.selectedProduct === 'petrol' || formState.selectedProduct === 'both'
   const showDiesel = formState.selectedProduct === 'diesel' || formState.selectedProduct === 'both'
@@ -269,11 +327,10 @@ export default function VatInvoiceForm() {
                         key={option.value}
                         type="button"
                         onClick={() => handleProductTypeChange(option.value)}
-                        className={`h-9 rounded text-xs font-semibold transition ${
-                          active
-                            ? 'bg-zinc-950 text-white shadow-xs'
-                            : 'text-zinc-600 hover:text-zinc-950'
-                        }`}
+                        className={`h-9 rounded text-xs font-semibold transition ${active
+                          ? 'bg-zinc-950 text-white shadow-xs'
+                          : 'text-zinc-600 hover:text-zinc-950'
+                          }`}
                       >
                         {option.label}
                       </button>
@@ -295,6 +352,60 @@ export default function VatInvoiceForm() {
             <SectionHeader number="02" title="Buyer Information" />
 
             <div className="space-y-3.5 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
+
+              <div className="sm:col-span-2">
+                <label className={labelClass}>
+                  Select Existing Customer
+                </label>
+
+                <select
+                  value={selectedCustomerId}
+                  disabled={customersLoading}
+                  onChange={(e) => {
+                    const customerId = e.target.value
+
+                    setSelectedCustomerId(customerId)
+
+                    const customer = customers.find(
+                      (item) => item.id === customerId
+                    )
+
+                    if (customer) {
+                      setFormState((previous) => ({
+                        ...previous,
+                        buyerName: customer.customer_name,
+                        buyerAddress: customer.address,
+                        buyerTinNo: customer.tin_number ?? '',
+                        buyerVatNumber: customer.vat_number ?? '',
+                      }))
+                    }
+                  }}
+                  className={inputClass}
+                >
+                  <option value="">
+                    {customersLoading
+                      ? 'Loading customers...'
+                      : 'Enter buyer manually / Select customer'}
+                  </option>
+
+                  {customers.map((customer) => (
+                    <option key={customer.id} value={customer.id}>
+                      {customer.customer_name}
+                    </option>
+                  ))}
+                </select>
+
+                {customerError && (
+                  <p className="mt-2 text-xs text-red-600">
+                    {customerError}
+                  </p>
+                )}
+
+                <p className="mt-1.5 text-xs text-zinc-500">
+                  Select a saved customer to automatically fill in their details.
+                </p>
+              </div>
+
               <div className="sm:col-span-2">
                 <label htmlFor="buyer_name" className={labelClass}>
                   Buyer / Company Name <Required />
